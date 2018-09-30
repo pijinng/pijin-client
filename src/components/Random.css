@@ -1,0 +1,16 @@
+.word-list-page {
+  display: flex;
+  flex-direction: row;
+}
+.word-list {
+  width: 61.5%;
+  padding-right: 40px;
+}
+.word-sidebar {
+  width: 38.5%;
+}
+.word-sidebar .footer {
+  text-align: center;
+  font-size: 0.8em;
+  color: #555555;
+}
