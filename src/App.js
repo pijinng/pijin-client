@@ -4,10 +4,16 @@ import { Link, Route, Switch, withRouter } from 'react-router-dom';
 import Random from './components/Random';
 import { connect } from 'react-redux';
 import Login from './components/Login';
+import { logoutUser } from './actions/auth';
 
 const Home = () => <div>Home</div>;
 
 class App extends Component {
+  handleLogout = evt => {
+    evt.preventDefault();
+    this.props.logoutUser(this.props.history);
+  };
+
   render() {
     return (
       <div className="App">
@@ -27,6 +33,13 @@ class App extends Component {
                     <Link to="/login">Login</Link>
                   </li>
                 )}
+                {this.props.auth.isAuthenticated && (
+                  <li>
+                    <a href="/logout" onClick={this.handleLogout}>
+                      Logout
+                    </a>
+                  </li>
+                )}
               </ul>
             </div>
           </div>
@@ -43,7 +56,10 @@ class App extends Component {
 }
 
 export default withRouter(
-  connect(state => ({
-    auth: state.auth,
-  }))(App)
+  connect(
+    state => ({
+      auth: state.auth,
+    }),
+    { logoutUser }
+  )(App)
 );

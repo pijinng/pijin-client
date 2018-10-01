@@ -1,4 +1,9 @@
-import { LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE } from '../actions/types';
+import {
+  LOGIN_REQUEST,
+  LOGIN_SUCCESS,
+  LOGIN_FAILURE,
+  LOGOUT_USER,
+} from '../actions/types';
 
 export default function auth(
   state = {
@@ -20,6 +25,7 @@ export default function auth(
         ...state,
         isFetching: action.isFetching,
         isAuthenticated: action.isAuthenticated,
+        creds: undefined,
         user: action.user,
         token: action.token,
       };
@@ -30,6 +36,13 @@ export default function auth(
         isAuthenticated: action.isAuthenticated,
         user: action.user,
         token: action.token,
+      };
+    case LOGOUT_USER:
+      return {
+        ...state,
+        isAuthenticated: action.isAuthenticated,
+        user: undefined,
+        token: undefined,
       };
     default:
       return state;
