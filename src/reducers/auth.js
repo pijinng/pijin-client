@@ -25,17 +25,17 @@ export default function auth(
         ...state,
         isFetching: action.isFetching,
         isAuthenticated: action.isAuthenticated,
-        creds: undefined,
         user: action.user,
         token: action.token,
+        creds: undefined,
+        errorMessage: undefined,
       };
     case LOGIN_FAILURE:
       return {
         ...state,
         isFetching: action.isFetching,
         isAuthenticated: action.isAuthenticated,
-        user: action.user,
-        token: action.token,
+        errorMessage: action.errorMessage,
       };
     case LOGOUT_USER:
       return {

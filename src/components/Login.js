@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import './Login.css';
-import { loginUser } from '../actions/auth';
+import { loginFacebook } from '../actions/auth';
 import { Redirect } from 'react-router-dom';
+import FacebookLogin from 'react-facebook-login';
 
 class Login extends Component {
   state = {
@@ -11,17 +12,11 @@ class Login extends Component {
     errors: {},
   };
 
-  onChangeInput = evt => {
-    const { name, value } = evt.target;
-    this.setState({ [name]: value });
-  };
-
-  onSubmit = async evt => {
-    evt.preventDefault();
-    this.props.loginUser(
+  responseFacebook = response => {
+    this.props.loginFacebook(
       {
-        username: this.state.username,
-        password: this.state.password,
+        facebookID: response.userID,
+        name: response.name,
       },
       this.props.history
     );
@@ -37,25 +32,15 @@ class Login extends Component {
         <div className="container">
           <div className="login-card">
             <h2 className="login-card-heading">Login</h2>
-            <form onSubmit={this.onSubmit}>
-              <div className="form-group">
-                <label>Username</label>
-                <input
-                  type="text"
-                  name="username"
-                  onChange={this.onChangeInput}
-                />
-              </div>
-              <div className="form-group">
-                <label>Password</label>
-                <input
-                  type="password"
-                  name="password"
-                  onChange={this.onChangeInput}
-                />
-              </div>
-              <button type="submit">Login</button>
-            </form>
+            {this.props.auth.errorMessage && (
+              <div class="error-message">{this.props.auth.errorMessage}</div>
+            )}
+            <FacebookLogin
+              appId="1088597931155576"
+              autoLoad
+              fields="name,email,picture"
+              callback={this.responseFacebook}
+            />
           </div>
         </div>
       </div>
@@ -67,5 +52,5 @@ export default connect(
   state => ({
     auth: state.auth,
   }),
-  { loginUser }
+  { loginFacebook }
 )(Login);

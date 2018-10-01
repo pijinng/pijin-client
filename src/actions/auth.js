@@ -6,13 +6,13 @@ import {
   LOGIN_FAILURE,
   LOGOUT_USER,
 } from './types';
+const BASE_URL = 'http://127.0.0.1:4000/v1';
 
-function requestLogin({ username, password }) {
+function requestLogin() {
   return {
-        type: LOGIN_REQUEST,
+    type: LOGIN_REQUEST,
     isFetching: true,
     isAuthenticated: false,
-    creds: { username, password },
   };
 }
 
@@ -42,51 +42,43 @@ function doLogout() {
   };
 }
 
-export const registerUser = (user, history) => dispatch => {
-  axios
-    .post('http://127.0.0.1:4000/v1/auth/register', user)
-    .then(() => history.push('/login'))
-    .catch(err => {
-      dispatch({
-        type: GET_ERRORS,
-        payload: err.response.data,
-      });
-    });
-};
-
-export const loginUser = ({ username, password }, history) => dispatch => {
-  dispatch(requestLogin({ username, password }));
-
-  fetch('http://127.0.0.1:4000/v1/auth/login', {
-    method: 'POST',
-    body: JSON.stringify({ username, password }),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
-    .then(response =>
-      response
-        .json()
-        .then(data => ({
-          user: data.data,
-          token: data.token,
-          response,
-        }))
-        .then(({ user, token, response }) => {
-          if (!response.ok) {
-            return;
-          }
-
-          localStorage.setItem('token', token);
-          dispatch(receiveLogin({ user, token }));
-          history.push('/');
-        })
-    )
-    .catch();
-};
-
 export const logoutUser = history => dispatch => {
   localStorage.removeItem('token');
   dispatch(doLogout());
   history.push('/');
+};
+
+export const loginFacebook = (
+  { facebookID, name },
+  history
+) => async dispatch => {
+  dispatch(requestLogin());
+
+  try {
+    const response = await fetch(`${BASE_URL}/auth/login/facebook`, {
+      method: 'POST',
+      body: JSON.stringify({ facebookID, name }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      const error =
+        data.error ||
+        data.message ||
+        'An error occured while trying to log you in.';
+
+      console.error('error');
+      dispatch(loginError(error));
+      return;
+    }
+
+    localStorage.setItem('token', data.token);
+    dispatch(receiveLogin({ user: data.user, token: data.token }));
+    history.push('/');
+  } catch (error) {
+    console.error('error down');
+    dispatch(loginError(error));
+  }
 };
