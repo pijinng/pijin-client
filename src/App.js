@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import './App.css';
-import Container from './containers/Container';
-import { Link, Route } from 'react-router-dom';
+import { Link, Route, Switch, withRouter } from 'react-router-dom';
 import Random from './components/Random';
+import { connect } from 'react-redux';
+import Login from './components/Login';
 
 const Home = () => <div>Home</div>;
 
@@ -11,7 +12,7 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
-          <Container>
+          <div className="container">
             <div className="menubar">
               <h1 className="App-title">Pijin.ng</h1>
               <ul className="menu">
@@ -21,16 +22,28 @@ class App extends Component {
                 <li>
                   <Link to="/entries/random">Random</Link>
                 </li>
+                {!this.props.auth.isAuthenticated && (
+                  <li>
+                    <Link to="/login">Login</Link>
+                  </li>
+                )}
               </ul>
             </div>
-          </Container>
+          </div>
         </header>
 
-        <Route exact path="/entries/random" component={Random} />
-        <Route exact path="/" component={Home} />
+        <Switch>
+          <Route path="/entries/random" component={Random} />
+          <Route path="/login" component={Login} />
+          <Route path="/" component={Home} />
+        </Switch>
       </div>
     );
   }
 }
 
-export default App;
+export default withRouter(
+  connect(state => ({
+    auth: state.auth,
+  }))(App)
+);

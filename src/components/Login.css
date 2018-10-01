@@ -1,0 +1,31 @@
+.login-page {
+  margin-top: 30px;
+}
+.login-card {
+  padding: 30px;
+  max-width: 500px;
+  margin: auto;
+  background: #ffffff;
+}
+.login-card .login-card-heading {
+  margin: 0 0 20px 0;
+}
+.login-card form button {
+  font-size: 1em;
+  height: 40px;
+  padding: 0 30px;
+  cursor: pointer;
+}
+.login-card form .form-group {
+  margin-bottom: 30px;
+}
+.login-card form label {
+  display: block;
+  margin-bottom: 10px;
+}
+.login-card form input {
+  width: calc(100% - 30px);
+  height: 40px;
+  font-size: 1em;
+  padding: 0 10px;
+}

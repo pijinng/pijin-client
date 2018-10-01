@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import './Random.css';
-import WordCard from './WordCard';
-import Container from '../containers/Container';
+import WordCard from '../containers/WordCard';
 
 export default class Random extends Component {
   static propTypes = {};
@@ -25,7 +24,7 @@ export default class Random extends Component {
   render() {
     return (
       <div>
-        <Container>
+        <div className="container">
           <div className="word-list-page">
             <div className="word-list">
               {this.state.entries.map((entry, id) => (
@@ -40,7 +39,7 @@ export default class Random extends Component {
               </div>
             </div>
           </div>
-        </Container>
+        </div>
       </div>
     );
   }
