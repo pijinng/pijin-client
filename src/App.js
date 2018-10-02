@@ -4,11 +4,15 @@ import { Link, Route, Switch, withRouter } from 'react-router-dom';
 import Random from './components/Random';
 import { connect } from 'react-redux';
 import Login from './components/Login';
-import { logoutUser } from './actions/auth';
+import { logoutUser, getUserFromToken } from './actions/auth';
 
 const Home = () => <div>Home</div>;
 
 class App extends Component {
+  async componentWillMount() {
+    await this.props.getUserFromToken(this.props.history);
+  }
+
   handleLogout = evt => {
     evt.preventDefault();
     this.props.logoutUser(this.props.history);
@@ -21,26 +25,34 @@ class App extends Component {
           <div className="container">
             <div className="menubar">
               <h1 className="App-title">Pijin.ng</h1>
-              <ul className="menu">
+              <ul className="menu menu-left">
                 <li>
                   <Link to="/">Home</Link>
                 </li>
                 <li>
                   <Link to="/entries/random">Random</Link>
                 </li>
-                {!this.props.auth.isAuthenticated && (
+              </ul>
+              {!this.props.auth.isAuthenticated && (
+                <ul className="menu menu-right">
                   <li>
                     <Link to="/login">Login</Link>
                   </li>
-                )}
-                {this.props.auth.isAuthenticated && (
+                </ul>
+              )}
+              {this.props.auth.isAuthenticated && (
+                <ul className="menu menu-right">
+                  <li>
+                    Signed in as{' '}
+                    {this.props.auth.user && this.props.auth.user.username}
+                  </li>
                   <li>
                     <a href="/logout" onClick={this.handleLogout}>
                       Logout
                     </a>
                   </li>
-                )}
-              </ul>
+                </ul>
+              )}
             </div>
           </div>
         </header>
@@ -60,6 +72,6 @@ export default withRouter(
     state => ({
       auth: state.auth,
     }),
-    { logoutUser }
+    { logoutUser, getUserFromToken }
   )(App)
 );

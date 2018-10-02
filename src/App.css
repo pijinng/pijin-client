@@ -18,13 +18,15 @@
   margin: 0;
   display: flex;
 }
-
+.menu.menu-left {
+  flex: 1;
+}
 .menu li {
   margin-right: 15px;
+  margin-top: 5px;
 }
 
 .menu a {
-  margin-top: 5px;
   display: block;
   color: #dddddd;
 }

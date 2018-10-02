@@ -1,6 +1,4 @@
-import axios from 'axios';
 import {
-  GET_ERRORS,
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
   LOGIN_FAILURE,
@@ -75,10 +73,41 @@ export const loginFacebook = (
     }
 
     localStorage.setItem('token', data.token);
-    dispatch(receiveLogin({ user: data.user, token: data.token }));
+    dispatch(receiveLogin({ user: data.data, token: data.token }));
     history.push('/');
   } catch (error) {
     console.error('error down');
     dispatch(loginError(error));
+  }
+};
+
+export const getUserFromToken = history => async dispatch => {
+  const token = localStorage.getItem('token');
+
+  if (!token) {
+    history.push('/login');
+    return;
+  }
+
+  try {
+    const userData = await fetch(`${BASE_URL}/users/@me`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const data = await userData.json();
+    if (!userData.ok) {
+      localStorage.removeItem('token');
+      history.push('/login');
+      return;
+    }
+    const user = data.data;
+    dispatch(receiveLogin({ user, token: token }));
+    return user;
+  } catch (error) {
+    console.error(error);
+    localStorage.removeItem('token');
+    history.push('/login');
   }
 };

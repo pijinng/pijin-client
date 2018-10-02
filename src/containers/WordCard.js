@@ -18,13 +18,13 @@ class WordCard extends Component {
     return (
       <div className="card">
         <div className="card-votes">
-          <a href="#" className="vote-button upvote">
+          <a href="/upvote" className="vote-button upvote">
             <img src={arrow} alt="upvote" />
           </a>
           <div className="vote-count upvote"> {entry.votesCount.up}</div>
           <div className="divider" />
           <div className="vote-count downvote"> {entry.votesCount.down}</div>
-          <a href="#" className="vote-button upvote">
+          <a href="/downvote" className="vote-button upvote">
             <img className="vote-button downvote" src={arrow} alt="downvote" />
           </a>
         </div>
