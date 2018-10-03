@@ -12,13 +12,8 @@ class EntryList extends Component {
     if (this.props.listType === 'random') {
       await this.props.addRandomEntries(RESULTS_PER_PAGE, { set: true });
     } else if (this.props.listType === 'entry') {
-      await this.props.addEntryEntries(
-        this.props.match.params.entry,
-        RESULTS_PER_PAGE,
-        {
-          set: true,
-        }
-      );
+      const { entry } = this.props.match.params;
+      await this.props.addEntryEntries(entry, RESULTS_PER_PAGE, { set: true });
     }
   }
 

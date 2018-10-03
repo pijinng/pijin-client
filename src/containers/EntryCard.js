@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import './EntryCard.css';
+import { Link } from 'react-router-dom';
 import arrow from '../Arrow.svg';
 
 class WordCard extends Component {
@@ -21,16 +22,16 @@ class WordCard extends Component {
           <a href="/upvote" className="vote-button upvote">
             <img src={arrow} alt="upvote" />
           </a>
-          <div className="vote-count upvote"> {entry.votesCount.up}</div>
+          <div className="vote-count upvote">{entry.votesCount.up}</div>
           <div className="divider" />
-          <div className="vote-count downvote"> {entry.votesCount.down}</div>
+          <div className="vote-count downvote">{entry.votesCount.down}</div>
           <a href="/downvote" className="vote-button upvote">
             <img className="vote-button downvote" src={arrow} alt="downvote" />
           </a>
         </div>
         <div className="card-entry">
           <h2 className="entry-name">
-            <a href={`/entries/${entry.name}`}>{entry.name}</a>
+            <Link to={`/entries/${entry.name}`}>{entry.name}</Link>
           </h2>
           <div className="entry-meaning">{entry.meaning}</div>
           <div className="entry-example">{entry.example}</div>

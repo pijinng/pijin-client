@@ -1,9 +1,10 @@
 .card {
   margin-bottom: 40px;
-  background: #ffffff;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  box-shadow: 0 5px 20px #3332;
+  border: 1px solid #eee;
 }
 .card-votes {
   flex: 0 0 90px;
