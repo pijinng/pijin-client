@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import { Link, Route, Switch, withRouter } from 'react-router-dom';
-import Random from './components/Random';
+import EntryList from './components/EntryList';
 import { connect } from 'react-redux';
 import Login from './components/Login';
 import { logoutUser, getUserFromToken } from './actions/auth';
@@ -58,7 +58,14 @@ class App extends Component {
         </header>
 
         <Switch>
-          <Route path="/entries/random" component={Random} />
+          <Route
+            path="/entries/random"
+            render={props => <EntryList {...props} listType="random" />}
+          />
+          <Route
+            path="/entries/:entry"
+            render={props => <EntryList {...props} listType="entry" />}
+          />
           <Route path="/login" component={Login} />
           <Route path="/" component={Home} />
         </Switch>

@@ -33,7 +33,9 @@ class Login extends Component {
           <div className="login-card">
             <h2 className="login-card-heading">Login</h2>
             {this.props.auth.errorMessage && (
-              <div class="error-message">{this.props.auth.errorMessage}</div>
+              <div className="error-message">
+                {this.props.auth.errorMessage}
+              </div>
             )}
             <FacebookLogin
               appId="1088597931155576"

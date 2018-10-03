@@ -33,8 +33,12 @@
 }
 .entry-name {
   margin: 0;
-  font-size: 1.2em;
+  font-size: 1.5em;
   padding: 30px 0;
+}
+.entry-name a {
+  text-decoration: none;
+  color: currentColor;
 }
 .entry-meaning {
   line-height: 1.3;

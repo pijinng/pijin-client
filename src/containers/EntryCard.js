@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import './WordCard.css';
+import './EntryCard.css';
 import arrow from '../Arrow.svg';
 
 class WordCard extends Component {
@@ -29,7 +29,9 @@ class WordCard extends Component {
           </a>
         </div>
         <div className="card-entry">
-          <h2 className="entry-name">{entry.name}</h2>
+          <h2 className="entry-name">
+            <a href={`/entries/${entry.name}`}>{entry.name}</a>
+          </h2>
           <div className="entry-meaning">{entry.meaning}</div>
           <div className="entry-example">{entry.example}</div>
         </div>
