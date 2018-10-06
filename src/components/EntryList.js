@@ -2,58 +2,63 @@ import React, { Component } from 'react';
 import './EntryList.css';
 import WordCard from '../containers/EntryCard';
 import { connect } from 'react-redux';
-import {
-  addRandomEntries,
-  addEntryEntries,
-  setHasLoadedEntries,
-} from '../actions/entries';
+import { getRandomEntries, getEntryEntries } from '../calls/entries';
 import { RESULTS_PER_PAGE } from '../config';
 
 class EntryList extends Component {
   static propTypes = {};
 
-  async setEntries() {
-    if (this.props.listType === 'random') {
-      await this.props.addRandomEntries(RESULTS_PER_PAGE, { set: true });
-    } else if (this.props.listType === 'entry') {
-      const { entry } = this.props.match.params;
-      await this.props.addEntryEntries(entry, RESULTS_PER_PAGE, { set: true });
+  state = {
+    entries: [],
+  };
+
+  async fetchEntries() {
+    try {
+      if (this.props.listType === 'random') {
+        const entries = await getRandomEntries(50);
+        this.setState({ entries });
+      } else if (this.props.listType === 'entry') {
+        const { entry } = this.props.match.params;
+        const entries = await getEntryEntries(entry, 50);
+        this.setState({ entries });
+      }
+    } catch (error) {
+      console.error(error);
     }
-    this.props.setHasLoadedEntries(true);
   }
 
   async componentDidMount() {
-    console.log('mounting', this.props.entries.hasLoadedEntries);
-    await this.setEntries();
+    try {
+      await this.fetchEntries();
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   async componentDidUpdate(prevProps) {
-    if (this.props.listType !== prevProps.listType) {
-      await this.setEntries();
+    if (
+      this.props.listType !== prevProps.listType ||
+      this.props.match.params.entry !== prevProps.match.params.entry
+    ) {
+      try {
+        await this.fetchEntries();
+      } catch (error) {
+        console.error(error);
+      }
     }
   }
 
   render() {
-    let visibleEntries = [];
-    if (this.props.entries.hasLoadedEntries) {
-      const { listType, entries } = this.props;
-      if (listType === 'random' && entries.random) {
-        visibleEntries = entries.random;
-      } else if (listType === 'entry' && entries.entry) {
-        visibleEntries = entries.entry;
-      }
-    }
-
     return (
       <div>
         <div className="container">
           <div className="word-list-page">
             <div className="word-list">
-              {visibleEntries.map((entry, id) => (
+              {this.state.entries.map((entry, id) => (
                 <WordCard entry={entry} key={id} />
               ))}
-              {visibleEntries.length > 0 &&
-                visibleEntries.length % RESULTS_PER_PAGE === 0 && (
+              {this.state.entries.length > 0 &&
+                this.state.entries.length % RESULTS_PER_PAGE === 0 && (
                   <button
                     className="see-more"
                     onClick={() => {
@@ -78,9 +83,4 @@ class EntryList extends Component {
   }
 }
 
-export default connect(
-  state => ({
-    entries: state.entries,
-  }),
-  { addRandomEntries, addEntryEntries, setHasLoadedEntries }
-)(EntryList);
+export default connect()(EntryList);
