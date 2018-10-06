@@ -69,7 +69,6 @@ export const addEntryEntries = (entry, n, { set } = {}) => async dispatch => {
     const response = await axios.get(
       `http://127.0.0.1:4000/v1/entries/name/${entry}?limit=${n}`
     );
-    console.log(response.data.data);
     set
       ? dispatch(setEntryEntriesType({ entries: response.data.data }))
       : dispatch(addEntryEntriesType({ entries: response.data.data }));

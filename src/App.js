@@ -30,7 +30,7 @@ class App extends Component {
                   <Link to="/">Home</Link>
                 </li>
                 <li>
-                  <Link to="/entries/random">Random</Link>
+                  <Link to="/random">Random</Link>
                 </li>
               </ul>
               {!this.props.auth.isAuthenticated && (
@@ -58,7 +58,7 @@ class App extends Component {
 
         <Switch>
           <Route
-            path="/entries/random"
+            path="/random"
             render={props => <EntryList {...props} listType="random" />}
           />
           <Route
