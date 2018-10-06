@@ -41,7 +41,6 @@ class EntryList extends Component {
       this.props.match.params.entry !== prevProps.match.params.entry
     ) {
       try {
-        console.log(this.props);
         await this.fetchEntries();
       } catch (error) {
         console.error(error);
