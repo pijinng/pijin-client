@@ -67,7 +67,6 @@ export const loginFacebook = (
         data.message ||
         'An error occured while trying to log you in.';
 
-      console.error('error');
       dispatch(loginError(error));
       return;
     }

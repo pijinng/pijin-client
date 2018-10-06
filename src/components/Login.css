@@ -6,6 +6,8 @@
   max-width: 500px;
   margin: auto;
   background: #ffffff;
+  box-shadow: 0 5px 20px #3332;
+  border: 1px solid #eee;
 }
 .login-card .login-card-heading {
   margin: 0 0 20px 0;

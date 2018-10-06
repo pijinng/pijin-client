@@ -2,7 +2,11 @@ import React, { Component } from 'react';
 import './EntryList.css';
 import WordCard from '../containers/EntryCard';
 import { connect } from 'react-redux';
-import { addRandomEntries, addEntryEntries } from '../actions/entries';
+import {
+  addRandomEntries,
+  addEntryEntries,
+  setHasLoadedEntries,
+} from '../actions/entries';
 import { RESULTS_PER_PAGE } from '../config';
 
 class EntryList extends Component {
@@ -15,13 +19,15 @@ class EntryList extends Component {
       const { entry } = this.props.match.params;
       await this.props.addEntryEntries(entry, RESULTS_PER_PAGE, { set: true });
     }
+    this.props.setHasLoadedEntries(true);
   }
 
   async componentDidMount() {
+    console.log('mounting', this.props.entries.hasLoadedEntries);
     await this.setEntries();
   }
 
-  async componentDidUpdate(prevProps, prevState, snapshot) {
+  async componentDidUpdate(prevProps) {
     if (this.props.listType !== prevProps.listType) {
       await this.setEntries();
     }
@@ -29,11 +35,13 @@ class EntryList extends Component {
 
   render() {
     let visibleEntries = [];
-    const { listType, entries } = this.props;
-    if (listType === 'random' && entries.random) {
-      visibleEntries = entries.random;
-    } else if (listType === 'entry' && entries.entry) {
-      visibleEntries = entries.entry;
+    if (this.props.entries.hasLoadedEntries) {
+      const { listType, entries } = this.props;
+      if (listType === 'random' && entries.random) {
+        visibleEntries = entries.random;
+      } else if (listType === 'entry' && entries.entry) {
+        visibleEntries = entries.entry;
+      }
     }
 
     return (
@@ -74,5 +82,5 @@ export default connect(
   state => ({
     entries: state.entries,
   }),
-  { addRandomEntries, addEntryEntries }
+  { addRandomEntries, addEntryEntries, setHasLoadedEntries }
 )(EntryList);

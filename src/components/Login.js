@@ -6,12 +6,6 @@ import { Redirect } from 'react-router-dom';
 import FacebookLogin from 'react-facebook-login';
 
 class Login extends Component {
-  state = {
-    username: '',
-    password: '',
-    errors: {},
-  };
-
   responseFacebook = response => {
     this.props.loginFacebook(
       {

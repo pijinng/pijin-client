@@ -3,9 +3,17 @@ import {
   SET_RANDOM_ENTRIES,
   SET_ENTRY_ENTRIES,
   ADD_ENTRY_ENTRIES,
+  SET_HAS_LOADED_ENTRIES,
 } from './types';
 import axios from '../util/axios';
 const BASE_URL = 'http://127.0.0.1:4000/v1';
+
+const setHasLoadedEntriesType = hasLoadedEntries => ({
+  type: SET_HAS_LOADED_ENTRIES,
+  payload: {
+    hasLoadedEntries,
+  },
+});
 
 function setRandomEntriesType({ entries }) {
   return {
@@ -58,7 +66,6 @@ export const addRandomEntries = (n, { set } = {}) => async dispatch => {
 
 export const addEntryEntries = (entry, n, { set } = {}) => async dispatch => {
   try {
-    console.log(entry);
     const response = await axios.get(
       `http://127.0.0.1:4000/v1/entries/name/${entry}?limit=${n}`
     );
@@ -69,4 +76,8 @@ export const addEntryEntries = (entry, n, { set } = {}) => async dispatch => {
   } catch (error) {
     console.error(error);
   }
+};
+
+export const setHasLoadedEntries = hasLoadedEntries => dispatch => {
+  dispatch(setHasLoadedEntriesType(hasLoadedEntries));
 };

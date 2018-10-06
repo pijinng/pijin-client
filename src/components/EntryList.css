@@ -23,4 +23,7 @@
   cursor: pointer;
   border: 0;
   margin-bottom: 40px;
+  background: #eee;
+  color: #333;
+  font-weight: bold;
 }

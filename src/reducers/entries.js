@@ -1,9 +1,9 @@
 import {
-  ADD_ENTRIES,
   ADD_RANDOM_ENTRIES,
   SET_RANDOM_ENTRIES,
   ADD_ENTRY_ENTRIES,
   SET_ENTRY_ENTRIES,
+  SET_HAS_LOADED_ENTRIES,
 } from '../actions/types';
 
 const initialState = {};
@@ -29,6 +29,11 @@ export default function(state = initialState, action) {
       return {
         ...state,
         entry: [...state.entry, ...action.payload.entries],
+      };
+    case SET_HAS_LOADED_ENTRIES:
+      return {
+        ...state,
+        hasLoadedEntries: action.payload.hasLoadedEntries,
       };
     default:
       return state;

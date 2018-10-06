@@ -43,7 +43,6 @@ class App extends Component {
               {this.props.auth.isAuthenticated && (
                 <ul className="menu menu-right">
                   <li>
-                    Signed in as{' '}
                     {this.props.auth.user && this.props.auth.user.username}
                   </li>
                   <li>
