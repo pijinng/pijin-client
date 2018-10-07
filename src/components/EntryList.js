@@ -10,18 +10,19 @@ class EntryList extends Component {
 
   state = {
     entries: [],
+    isLoading: false,
   };
 
   async fetchEntries() {
     try {
-      if (this.props.listType === 'random') {
-        const entries = await getRandomEntries(50);
-        this.setState({ entries });
-      } else if (this.props.listType === 'entry') {
-        const { entry } = this.props.match.params;
-        const entries = await getEntryEntries(entry, 50);
-        this.setState({ entries });
-      }
+      return this.props.listType === 'random'
+        ? await getRandomEntries(RESULTS_PER_PAGE)
+        : this.props.listType === 'entry'
+          ? await getEntryEntries(
+              this.props.match.params.entry,
+              RESULTS_PER_PAGE
+            )
+          : [];
     } catch (error) {
       console.error(error);
     }
@@ -29,7 +30,10 @@ class EntryList extends Component {
 
   async componentDidMount() {
     try {
-      await this.fetchEntries();
+      this.setState({ isLoading: true });
+      const entries = await this.fetchEntries();
+      this.setState({ entries, isLoading: false });
+      window.scrollTo(0, 0);
     } catch (error) {
       console.error(error);
     }
@@ -41,33 +45,48 @@ class EntryList extends Component {
       this.props.match.params.entry !== prevProps.match.params.entry
     ) {
       try {
-        await this.fetchEntries();
+        this.setState({ entries: [], isLoading: true });
+        const entries = await this.fetchEntries();
+        this.setState({ entries, isLoading: false });
+        window.scrollTo(0, 0);
       } catch (error) {
         console.error(error);
       }
     }
   }
 
+  handleSeeMoreClick = async () => {
+    try {
+      this.setState({ isLoading: true });
+      const { entries } = this.state;
+      const newEntries = await this.fetchEntries();
+      entries.push(...newEntries);
+      this.setState({ isLoading: false, entries });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   render() {
+    const { entries, isLoading } = this.state;
     return (
       <div>
         <div className="container">
           <div className="word-list-page">
             <div className="word-list">
-              {this.state.entries.map((entry, id) => (
+              {entries.map((entry, id) => (
                 <WordCard entry={entry} key={id} />
               ))}
-              {this.state.entries.length > 0 &&
-                this.state.entries.length % RESULTS_PER_PAGE === 0 && (
+              {entries.length > 0 &&
+                entries.length % RESULTS_PER_PAGE === 0 && (
                   <button
                     className="see-more"
-                    onClick={() => {
-                      this.props.addRandomEntries(RESULTS_PER_PAGE);
-                    }}
+                    onClick={this.handleSeeMoreClick}
                   >
                     See more
                   </button>
                 )}
+              {isLoading && 'Loading entries...'}
             </div>
             <div className="word-sidebar">
               <div className="footer">
